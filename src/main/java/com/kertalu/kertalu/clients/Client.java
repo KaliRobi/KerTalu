@@ -11,7 +11,7 @@ public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private final Long id;
 
     @Column(name = "insert_date", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -28,7 +28,7 @@ public class Client {
     private String phone;
 
 
-    public Client(String id, Date insert_date, Date update_date, String name, String email, String phone) {
+    public Client(Long id, Date insert_date, Date update_date, String name, String email, String phone) {
         this.id = id;
         this.insert_date = insert_date;
         this.update_date = update_date;
@@ -37,13 +37,10 @@ public class Client {
         this.phone = phone;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Date getInsert_date() {
         return insert_date;

@@ -1,35 +1,37 @@
 package com.kertalu.kertalu.subscription;
 
 import com.kertalu.kertalu.clients.Client;
+import com.kertalu.kertalu.kertaluservices.KtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+
 @Service
 public class SubscriptionService {
 
     @Autowired
-    private UserSubscriptionRepository userSubscriptionRepository;
+    private SubscriptionRepository subscriptionRepository;
 
     @Autowired
     private SubscriptionTierRepository subscriptionTierRepository;
 
-    public Subscription subscribeUser(Client client, Long tierId) {
+    public Subscription subscribeClient(Client client, Long tierId) throws Exception {
         SubscriptionTier tier = subscriptionTierRepository.findById(tierId)
                 .orElseThrow(() -> new Exception("Tier not found"));
 
-        Subscription subscription = new Subscription(LocalDateTime.now(), true, user, tier);
+        Subscription subscription = new Subscription(LocalDateTime.now(), true, tier, client);
 
-        return userSubscriptionRepository.save(subscription);
+        return subscriptionRepository.save(subscription);
     }
 
-    // Check if user's tier allows access to a specific feature
-    public boolean hasFeatureAccess(Client client, String feature) {
 
-        return userSubscriptionRepository.findByUser(client)
+    public boolean hasFeatureAccess(Client client, KtService ktService) {
+
+        return subscriptionRepository.findByClient(client)
                 .getTier()
-                .getFeatures()
-                .contains(feature);
+                .getKtServiceList()
+                .contains(ktService);
     }
 }

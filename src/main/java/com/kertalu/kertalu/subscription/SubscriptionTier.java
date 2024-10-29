@@ -20,14 +20,17 @@ public class SubscriptionTier {
         private final Date insert_date;
         private final String name;
         private final double description;
+
+        private boolean isPublic;
         private final ArrayList<KtService> KtServiceList;
 
 
-    public SubscriptionTier(Long id, Date insert_date, String name, double description, ArrayList<KtService> ktServiceList) {
+    public SubscriptionTier(Long id, Date insert_date, String name, double description, boolean isPublic, ArrayList<KtService> ktServiceList) {
         this.id = id;
         this.insert_date = insert_date;
         this.name = name;
         this.description = description;
+        this.isPublic = isPublic;
         KtServiceList = ktServiceList;
     }
 
@@ -51,6 +54,14 @@ public class SubscriptionTier {
         return insert_date;
     }
 
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
+    }
+
     @Override
     public String toString() {
         return "SubscriptionTier{" +
@@ -58,6 +69,7 @@ public class SubscriptionTier {
                 ", insert_date=" + insert_date +
                 ", name='" + name + '\'' +
                 ", description=" + description +
+                ", isPublic=" + isPublic +
                 ", KtServiceList=" + KtServiceList +
                 '}';
     }
