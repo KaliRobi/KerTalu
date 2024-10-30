@@ -1,11 +1,10 @@
 package com.kertalu.kertalu.subscription;
 
-import com.kertalu.kertalu.clients.Client;
+import com.kertalu.kertalu.users.clients.ktclients.Client;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 public class Subscription {

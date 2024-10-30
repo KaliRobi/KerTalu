@@ -1,7 +1,8 @@
-package com.kertalu.kertalu.subscription;
+package com.kertalu.kertalu.repositories;
 
 
-import com.kertalu.kertalu.clients.Client;
+import com.kertalu.kertalu.users.clients.ktclients.Client;
+import com.kertalu.kertalu.subscription.Subscription;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

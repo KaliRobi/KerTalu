@@ -1,4 +1,4 @@
-package com.kertalu.kertalu.clients;
+package com.kertalu.kertalu.users.clients.ktclients;
 
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
