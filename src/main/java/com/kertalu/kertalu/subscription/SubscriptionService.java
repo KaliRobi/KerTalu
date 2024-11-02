@@ -8,7 +8,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+
 
 
 @Service
@@ -25,7 +26,7 @@ public class SubscriptionService {
         SubscriptionTier tier = subscriptionTierRepository.findById(tierId)
                 .orElseThrow(() -> new Exception("Tier not found"));
 
-        Subscription subscription = new Subscription(LocalDateTime.now(), true, tier, client);
+        Subscription subscription = new Subscription(Instant.now(), true, tier, client);
 
         return subscriptionRepository.save(subscription);
     }

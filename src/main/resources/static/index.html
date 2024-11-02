@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KerTalu Subscription</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        h1 {
+            text-align: center;
+            color: #343a40;
+            margin-bottom: 30px;
+        }
+        .subscription-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .subscription-tier {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .subscription-tier:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .tier-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .price {
+            font-size: 24px;
+            color: #007bff;
+            font-weight: bold;
+        }
+        .features {
+            margin: 10px 0;
+        }
+        .features ul {
+            padding: 0;
+            list-style: none;
+        }
+        .features li {
+            margin: 5px 0;
+            padding-left: 1em;
+            position: relative;
+        }
+        .features li:before {
+            content: "✔";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+        }
+        .register-form {
+            display: none;
+            margin: 20px auto;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 960px;
+            width: 100%;
+            position: relative;
+        }
+        .register-form h3 {
+            margin-bottom: 15px;
+            color: #343a40;
+        }
+        .register-form input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+        .register-form input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .register-form button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .register-form button:hover {
+            background-color: #0056b3;
+        }
+        .close-button {
+            background-color: transparent;
+            border: none;
+            color: #dc3545;
+            font-size: 20px;
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+            top: 20px;
+        }
+        .loading {
+            display: none;
+            margin-top: 10px;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+
+<h1>KerTalu Subscription Plans</h1>
+
+<div class="subscription-container">
+    <div class="subscription-tier" onclick="selectTier('basic')">
+        <div class="tier-header">
+            <h2>Basic</h2>
+            <p class="price">€15/month</p>
+        </div>
+        <div class="features">
+            <ul>
+                <li>Basic webshop</li>
+                <li>Introduction site</li>
+                <li>Opportunity to send out newsletters</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="subscription-tier" onclick="selectTier('advanced')">
+        <div class="tier-header">
+            <h2>Advanced</h2>
+            <p class="price">€20/month</p>
+        </div>
+        <div class="features">
+            <ul>
+                <li>Basic webshop</li>
+                <li>Introduction site</li>
+                <li>Opportunity to send out newsletters</li>
+                <li>Inventory management site</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="subscription-tier" onclick="selectTier('pro')">
+        <div class="tier-header">
+            <h2>Pro</h2>
+            <p class="price">€25/month</p>
+        </div>
+        <div class="features">
+            <ul>
+                <li>Basic webshop</li>
+                <li>Introduction site</li>
+                <li>Opportunity to send out newsletters</li>
+                <li>Inventory management site</li>
+                <li>Personalized customer support</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="register-form" id="registerForm">
+    <button class="close-button" onclick="closeForm()">✖</button>
+    <h3>Register for Subscription</h3>
+    <input type="text" id="name" placeholder="Your Name" required>
+    <input type="email" id="email" placeholder="Your Email" required>
+    <input type="text" id="subscriptionType" placeholder="Subscription Type" readonly>
+    <button onclick="submitForm()">Submit</button>
+    <p class="loading" id="loading">Submitting...</p>
+</div>
+
+<script>
+        function selectTier(tier) {
+            document.getElementById('subscriptionType').value = tier.charAt(0).toUpperCase() + tier.slice(1);
+            document.getElementById('registerForm').style.display = 'block';
+        }
+
+        function closeForm() {
+            document.getElementById('registerForm').style.display = 'none';
+        }
+
+        async function submitForm() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subscriptionType = document.getElementById('subscriptionType').value;
+            const loading = document.getElementById('loading');
+
+            const subscriptionDetails = {
+                name: name,
+                email: email,
+                subscriptionType: subscriptionType
+            };
+
+            loading.style.display = 'block';
+
+            try {
+                const response = await fetch('http://localhost:5245/v1/subscriptions/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(subscriptionDetails)
+                });
+
+                loading.style.display = 'none';
+
+                if (response.ok) {
+                    alert('Subscription created successfully!');
+                    closeForm();
+                } else {
+                    alert('Failed to create subscription. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+                loading.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

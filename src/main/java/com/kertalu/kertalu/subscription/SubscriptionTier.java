@@ -4,6 +4,7 @@ import com.kertalu.kertalu.kertaluservices.KtService;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -17,15 +18,15 @@ public class SubscriptionTier {
         @Column(name = "insert_date", nullable = false, updatable = false)
         @Temporal(TemporalType.TIMESTAMP)
         @CreatedDate
-        private final Date insert_date;
+        private final Instant insert_date;
         private final String name;
-        private final double description;
+        private String description;
 
         private boolean isPublic;
         private final ArrayList<KtService> KtServiceList;
 
 
-    public SubscriptionTier(Long id, Date insert_date, String name, double description, boolean isPublic, ArrayList<KtService> ktServiceList) {
+    public SubscriptionTier(Long id, Instant insert_date, String name, String description, boolean isPublic, ArrayList<KtService> ktServiceList) {
         this.id = id;
         this.insert_date = insert_date;
         this.name = name;
@@ -42,15 +43,19 @@ public class SubscriptionTier {
         return name;
     }
 
-    public double getDescription() {
+    public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public ArrayList<KtService> getKtServiceList() {
         return KtServiceList;
     }
 
-    public Date getInsert_date() {
+    public Instant getInsert_date() {
         return insert_date;
     }
 

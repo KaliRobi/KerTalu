@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Entity
@@ -16,19 +17,19 @@ public class Client {
     @Column(name = "insert_date", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
-    private Date insert_date;
+    private Instant insert_date;
 
     @Column(name = "update_date")
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
-    private Date update_date;
+    private Instant update_date;
 
     private String name;
     private String email;
     private String phone;
 
 
-    public Client(Long id, Date insert_date, Date update_date, String name, String email, String phone) {
+    public Client(Long id, Instant insert_date, Instant update_date, String name, String email, String phone) {
         this.id = id;
         this.insert_date = insert_date;
         this.update_date = update_date;
@@ -42,19 +43,19 @@ public class Client {
     }
 
 
-    public Date getInsert_date() {
+    public Instant getInsert_date() {
         return insert_date;
     }
 
-    public void setInsert_date(Date insert_date) {
+    public void setInsert_date(Instant insert_date) {
         this.insert_date = insert_date;
     }
 
-    public Date getUpdate_date() {
+    public Instant getUpdate_date() {
         return update_date;
     }
 
-    public void setUpdate_date(Date update_date) {
+    public void setUpdate_date(Instant update_date) {
         this.update_date = update_date;
     }
 

@@ -4,6 +4,7 @@ import com.kertalu.kertalu.users.clients.ktclients.Client;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,10 +17,10 @@ public class Subscription {
     @Column(name = "insert_date", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
-    private LocalDateTime insert_date;
+    private Instant insert_date;
 
 
-    private LocalDateTime startDate;
+    private Instant startDate;
 //    private Date endDate; // this needs to be added later. also calculated
     private boolean isActive;
 
@@ -29,7 +30,7 @@ public class Subscription {
     @ManyToOne
     private Client client;
 
-    public Subscription(LocalDateTime startDate,  boolean isActive, SubscriptionTier tier, Client client) {
+    public Subscription(Instant startDate,  boolean isActive, SubscriptionTier tier, Client client) {
         this.startDate = startDate;
         this.isActive = isActive;
         this.tier = tier;
@@ -40,19 +41,19 @@ public class Subscription {
         return id;
     }
 
-    public LocalDateTime getInsert_date() {
+    public Instant getInsert_date() {
         return insert_date;
     }
 
-    public void setInsert_date(LocalDateTime insert_date) {
+    public void setInsert_date(Instant insert_date) {
         this.insert_date = insert_date;
     }
 
-    public LocalDateTime getStartDate() {
+    public Instant getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(Instant startDate) {
         this.startDate = startDate;
     }
 
