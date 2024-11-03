@@ -1,18 +1,18 @@
 package com.kertalu.kertalu.controllers.datatransferobjects;
 
-import com.kertalu.kertalu.users.clients.ktclients.Client;
+import com.kertalu.kertalu.users.userregistration.ClientRegistrationInformation;
 
 public class SubscriptionRequest {
 
-    private Client client;
+    private ClientRegistrationInformation clientRegistrationInformation;
     private Long subscriptionTierId;
 
-    public Client getClient() {
-        return client;
+    public ClientRegistrationInformation getClientRegistrationInformation() {
+        return clientRegistrationInformation;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setClientRegistrationInformation(ClientRegistrationInformation clientRegistrationInformation) {
+        this.clientRegistrationInformation = clientRegistrationInformation;
     }
 
     public Long getSubscriptionTierId() {
@@ -26,7 +26,7 @@ public class SubscriptionRequest {
     @Override
     public String toString() {
         return "SubscriptionRequest{" +
-                "client=" + client +
+                "client=" + clientRegistrationInformation +
                 ", subscriptionTierId=" + subscriptionTierId +
                 '}';
     }

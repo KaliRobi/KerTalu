@@ -10,6 +10,7 @@ import com.kertalu.kertalu.subscription.Subscription;
 import com.kertalu.kertalu.subscription.SubscriptionService;
 import com.kertalu.kertalu.subscription.SubscriptionTier;
 import com.kertalu.kertalu.users.clients.ktclients.Client;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -30,14 +31,19 @@ public class SubscriptionServiceTest {
     @Mock
     private SubscriptionTierRepository subscriptionTierRepository;
 
+
+
     private Client client;
     private SubscriptionTier subscriptionTier;
     private Subscription subscription;
     private KtService ktService;
+    private KtService ktService_noAccess;
 
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
         client = new Client(2L, Instant.now(), Instant.now(), "Jane Doe", "jane.doe@message.com", "+3725555500");
+        ktService_noAccess = new KtService(2L, Instant.now(), true, "SR2", "this is a dummy service object");
         ktService = new KtService(1L, Instant.now(), true, "SR1", "this is a dummy service object");
         ArrayList<KtService> serviceList = new ArrayList<>();
         serviceList.add(ktService);
@@ -94,7 +100,7 @@ public class SubscriptionServiceTest {
 
     @Test
     public void testHasFeatureAccess_Success() {
-        KtService ktService = new KtService(1L, Instant.now(), true, "SR1", "this is a dummy service object" );
+
         when(subscriptionRepository.findByClient(client)).thenReturn(subscription);
 
         boolean hasAccess = subscriptionService.hasFeatureAccess(client, ktService);
@@ -105,10 +111,10 @@ public class SubscriptionServiceTest {
 
     @Test
     public void testHasFeatureAccess_NoAccess() {
-        KtService ktService = new KtService(1L, Instant.now(), true, "SR1", "this is a dummy service object" );
+
         when(subscriptionRepository.findByClient(client)).thenReturn(subscription);
 
-        boolean hasAccess = subscriptionService.hasFeatureAccess(client, ktService);
+        boolean hasAccess = subscriptionService.hasFeatureAccess(client, ktService_noAccess);
 
         assertFalse(hasAccess);
         verify(subscriptionRepository).findByClient(client);

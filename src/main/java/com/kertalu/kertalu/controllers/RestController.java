@@ -31,12 +31,11 @@ public class RestController {
 
 
 
-
     @PostMapping(path = "/v1/subscriptions/create")
     public ResponseEntity<Subscription> registerClientSubscription(@RequestBody SubscriptionRequest request) {
         Subscription subscription = null;
         try {
-            subscription = subscriptionService.subscribeClient(request.getClient(), request.getSubscriptionTierId());
+            subscription = subscriptionService.subscribeClient(request.getClientRegistrationInformation(), request.getSubscriptionTierId());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
@@ -44,21 +43,21 @@ public class RestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(subscription);
     }
 
-    @PostMapping(path = "/v1/subscriptions/modify")
-    public ResponseEntity<Subscription> registerClientSussbscription(@RequestBody SubscriptionRequest request) {
-        try {
-            if(subscriptionService.getClientSubscription(request.getClient()).equals(null)
-            ){
-                System.out.println("hello");
-//                subscription.setTier(tier);
-            }
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
-    }
+//    @PostMapping(path = "/v1/subscriptions/modify")
+//    public ResponseEntity<Subscription> registerClientSussbscription(@RequestBody SubscriptionRequest request) {
+//        try {
+//            if(subscriptionService.getClientSubscription(request.getClientRegistrationInformation()).equals(null)
+//            ){
+//                System.out.println("hello");
+////                subscription.setTier(tier);
+//            }
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//
+//        }
+//        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+//    }
 
 
     @GetMapping(path = "/v1/client")

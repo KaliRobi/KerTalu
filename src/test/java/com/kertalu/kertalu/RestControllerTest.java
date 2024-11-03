@@ -3,6 +3,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.kertalu.kertalu.applicationconfiguration.TestSecurityConfig;
 import com.kertalu.kertalu.controllers.RestController;
 import com.kertalu.kertalu.controllers.datatransferobjects.SubscriptionRequest;
 import com.kertalu.kertalu.repositories.ClientRepository;
@@ -10,6 +11,7 @@ import com.kertalu.kertalu.subscription.Subscription;
 import com.kertalu.kertalu.subscription.SubscriptionService;
 import com.kertalu.kertalu.subscription.SubscriptionTier;
 import com.kertalu.kertalu.users.clients.ktclients.Client;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,17 +20,20 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
+@Import(TestSecurityConfig.class)
+@Transactional
 public class RestControllerTest {
 
     @Autowired
@@ -43,28 +48,33 @@ public class RestControllerTest {
     @InjectMocks
     private RestController restController;
 
+    private Client client1;
+    private Client client2;
+    private Subscription subscription;
+    private  SubscriptionTier tier1;
+    private  SubscriptionRequest request;
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
+        client1 = new Client(1L, Instant.now(), Instant.now(), "Jon Doe", "jon.doe@message.com", "+3725555500");
+        client2 = new Client(2L, Instant.now(), Instant.now(), "Jane Doe", "jane.doe@message.com", "+3725555500");
+        tier1 = new SubscriptionTier(55L, Instant.now(), "test tier", "tier tier", true, null );
+        subscription = new Subscription(Instant.now(), true, tier1, client1);
+        request = new SubscriptionRequest();
+//        request.setClient(client1);
     }
-
 
 
     @Test
     public void testRegisterClientSubscription_Success() throws Exception {
-        SubscriptionRequest request = new SubscriptionRequest();
-        Client client1 = new Client(1L, Instant.now(), Instant.now(), "Jon Doe", "jon.doe@message.com", "+3725555500");
-        SubscriptionTier tier1 = new SubscriptionTier(55L, Instant.now(), "test tier", "tier tier", true, null );
-        request.setClient(client1);
         request.setSubscriptionTierId(tier1.getId());
-
-        Subscription subscription = new Subscription(Instant.now(), true, tier1, client1);
 
         when(subscriptionService.subscribeClient(client1, tier1.getId())).thenReturn(subscription);
 
         mockMvc.perform(post("/v1/subscriptions/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"client\":\"client1\", \"subscriptionTierId\":\"tier1\"}"))
+                .content("{\"client\":\"client1\", \"subscriptionTierId\":\"tier1\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.client").value("client1"))
                 .andExpect(jsonPath("$.tier").value("tier1"));
@@ -72,8 +82,7 @@ public class RestControllerTest {
 
     @Test
     public void testRegisterClientSubscription_Failure() throws Exception {
-        Client client1 = new Client(1L, Instant.now(), Instant.now(), "Jon Doe", "jon.doe@message.com", "+3725555500");
-        SubscriptionTier tier1 = new SubscriptionTier(55L, Instant.now(), "test tier", "tier tier", true, null );
+
         when(subscriptionService.subscribeClient(client1, tier1.getId())).thenThrow(new RuntimeException("Error occurred"));
 
         mockMvc.perform(post("/v1/subscriptions/create")
@@ -84,9 +93,6 @@ public class RestControllerTest {
 
     @Test
     public void testRegisterClientSubscription_Modify_Success() throws Exception {
-        SubscriptionRequest request = new SubscriptionRequest();
-        Client client1 = new Client(1L, Instant.now(), Instant.now(), "Jon Doe", "jon.doe@message.com", "+3725555500");
-        request.setClient(client1);
 
         when(subscriptionService.getClientSubscription(client1)).thenReturn(null);
 
@@ -98,9 +104,6 @@ public class RestControllerTest {
 
     @Test
     public void testRegisterClientSubscription_Modify_Failure() throws Exception {
-        SubscriptionRequest request = new SubscriptionRequest();
-        Client client1 = new Client(1L, Instant.now(), Instant.now(), "Jon Doe", "jon.doe@message.com", "+3725555500");
-        request.setClient(client1);
 
         when(subscriptionService.getClientSubscription(client1)).thenThrow(new RuntimeException("Error occurred"));
 
@@ -112,10 +115,10 @@ public class RestControllerTest {
 
     @Test
     public void testListClients() throws Exception {
-        Client client1 = new Client(1L, Instant.now(), Instant.now(), "Jon Doe", "jon.doe@message.com", "+3725555500");
-        Client client2 = new Client(2L, Instant.now(), Instant.now(), "Jane Doe", "jane.doe@message.com", "+3725555500");
-        List<Client> clients = Arrays.asList(client1, client2);
 
+        List<Client> clients = Arrays.asList(client1, client2);
+        List<Client> spsps  = clientRepository.findAll();
+        System.out.println(spsps);
         when(clientRepository.findAll()).thenReturn(clients);
 
         mockMvc.perform(get("/v1/client"))

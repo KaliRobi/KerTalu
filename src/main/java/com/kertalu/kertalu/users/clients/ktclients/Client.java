@@ -12,7 +12,7 @@ public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private final Long id;
+    private Long id;
 
     @Column(name = "insert_date", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -29,13 +29,13 @@ public class Client {
     private String phone;
 
 
-    public Client(Long id, Instant insert_date, Instant update_date, String name, String email, String phone) {
-        this.id = id;
-        this.insert_date = insert_date;
-        this.update_date = update_date;
+    public Client(  String name, String email, String phone) {
         this.name = name;
         this.email = email;
         this.phone = phone;
+        this.insert_date = Instant.now();
+        this.update_date = Instant.now();
+
     }
 
     public Long getId() {

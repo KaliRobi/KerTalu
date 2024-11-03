@@ -4,6 +4,8 @@ import com.kertalu.kertalu.users.clients.ktclients.Client;
 import com.kertalu.kertalu.kertaluservices.KtService;
 import com.kertalu.kertalu.repositories.SubscriptionRepository;
 import com.kertalu.kertalu.repositories.SubscriptionTierRepository;
+import com.kertalu.kertalu.users.userregistration.ClientRegistrationInformation;
+import com.kertalu.kertalu.users.userregistration.ClientRegistrationInformationService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,19 +24,21 @@ public class SubscriptionService {
     private SubscriptionTierRepository subscriptionTierRepository;
 
     @Transactional
-    public Subscription subscribeClient(Client client, Long tierId) throws Exception {
-        SubscriptionTier tier = subscriptionTierRepository.findById(tierId)
-                .orElseThrow(() -> new Exception("Tier not found"));
+    public Subscription subscribeClient(ClientRegistrationInformation clientInfo, Long tierId) throws Exception {
 
-        Subscription subscription = new Subscription(Instant.now(), true, tier, client);
 
-        return subscriptionRepository.save(subscription);
+
+//        SubscriptionTier tier = subscriptionTierRepository.findById(tierId)
+//                .orElseThrow(() -> new Exception("Tier not found"));
+//
+//        Subscription subscription = new Subscription(Instant.now(), true, tier, client);
+//
+//        return subscriptionRepository.save(subscription);
     }
 
     public Subscription getClientSubscription(Client client){
         return subscriptionRepository.findByClient(client);
     }
-
 
     public boolean hasFeatureAccess(Client client, KtService ktService) {
 
