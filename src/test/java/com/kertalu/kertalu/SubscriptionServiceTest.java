@@ -42,7 +42,7 @@ public class SubscriptionServiceTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
-        client = new Client(2L, Instant.now(), Instant.now(), "Jane Doe", "jane.doe@message.com", "+3725555500");
+        client = new Client( "Jane Doe", "jane.doe@message.com", "+3725555500");
         ktService_noAccess = new KtService(2L, Instant.now(), true, "SR2", "this is a dummy service object");
         ktService = new KtService(1L, Instant.now(), true, "SR1", "this is a dummy service object");
         ArrayList<KtService> serviceList = new ArrayList<>();

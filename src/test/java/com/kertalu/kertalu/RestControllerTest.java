@@ -11,6 +11,7 @@ import com.kertalu.kertalu.subscription.Subscription;
 import com.kertalu.kertalu.subscription.SubscriptionService;
 import com.kertalu.kertalu.subscription.SubscriptionTier;
 import com.kertalu.kertalu.users.clients.ktclients.Client;
+import com.kertalu.kertalu.users.userregistration.ClientRegistrationInformation;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,8 +58,9 @@ public class RestControllerTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
-        client1 = new Client(1L, Instant.now(), Instant.now(), "Jon Doe", "jon.doe@message.com", "+3725555500");
-        client2 = new Client(2L, Instant.now(), Instant.now(), "Jane Doe", "jane.doe@message.com", "+3725555500");
+        client1 = new Client(  "Jon Doe", "jon.doe@message.com", "+3725555500");
+        client2 = new Client(  "Jane Doe", "jane.doe@message.com", "+3725555500");
+        ClientRegistrationInformation clientRegistrationInformation = new ClientRegistrationInformation("Arvo Part");
         tier1 = new SubscriptionTier(55L, Instant.now(), "test tier", "tier tier", true, null );
         subscription = new Subscription(Instant.now(), true, tier1, client1);
         request = new SubscriptionRequest();
