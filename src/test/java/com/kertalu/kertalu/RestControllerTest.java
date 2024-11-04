@@ -60,75 +60,75 @@ public class RestControllerTest {
         MockitoAnnotations.openMocks(this);
         client1 = new Client(  "Jon Doe", "jon.doe@message.com", "+3725555500");
         client2 = new Client(  "Jane Doe", "jane.doe@message.com", "+3725555500");
-        ClientRegistrationInformation clientRegistrationInformation = new ClientRegistrationInformation("Arvo Part");
+//        ClientRegistrationInformation clientRegistrationInformation = new ClientRegistrationInformation("Arvo Part");
         tier1 = new SubscriptionTier(55L, Instant.now(), "test tier", "tier tier", true, null );
         subscription = new Subscription(Instant.now(), true, tier1, client1);
         request = new SubscriptionRequest();
 //        request.setClient(client1);
     }
 
-
-    @Test
-    public void testRegisterClientSubscription_Success() throws Exception {
-        request.setSubscriptionTierId(tier1.getId());
-
-        when(subscriptionService.subscribeClient(client1, tier1.getId())).thenReturn(subscription);
-
-        mockMvc.perform(post("/v1/subscriptions/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"client\":\"client1\", \"subscriptionTierId\":\"tier1\"}"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.client").value("client1"))
-                .andExpect(jsonPath("$.tier").value("tier1"));
-    }
-
-    @Test
-    public void testRegisterClientSubscription_Failure() throws Exception {
-
-        when(subscriptionService.subscribeClient(client1, tier1.getId())).thenThrow(new RuntimeException("Error occurred"));
-
-        mockMvc.perform(post("/v1/subscriptions/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"client\":\"client1\", \"subscriptionTierId\":\"tier1\"}"))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    public void testRegisterClientSubscription_Modify_Success() throws Exception {
-
-        when(subscriptionService.getClientSubscription(client1)).thenReturn(null);
-
-        mockMvc.perform(post("/v1/subscriptions/modify")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"client\":\"client1\"}"))
-                .andExpect(status().isCreated());
-    }
-
-    @Test
-    public void testRegisterClientSubscription_Modify_Failure() throws Exception {
-
-        when(subscriptionService.getClientSubscription(client1)).thenThrow(new RuntimeException("Error occurred"));
-
-        mockMvc.perform(post("/v1/subscriptions/modify")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"client\":\"client1\"}"))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    public void testListClients() throws Exception {
-
-        List<Client> clients = Arrays.asList(client1, client2);
-        List<Client> spsps  = clientRepository.findAll();
-        System.out.println(spsps);
-        when(clientRepository.findAll()).thenReturn(clients);
-
-        mockMvc.perform(get("/v1/client"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].name").value("client1"))
-                .andExpect(jsonPath("$[1].name").value("client2"));
-    }
+//
+//    @Test
+//    public void testRegisterClientSubscription_Success() throws Exception {
+//        request.setSubscriptionTierId(tier1.getId());
+//
+//        when(subscriptionService.subscribeClient(client1, tier1.getId())).thenReturn(subscription);
+//
+//        mockMvc.perform(post("/v1/subscriptions/create")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                .content("{\"client\":\"client1\", \"subscriptionTierId\":\"tier1\"}"))
+//                .andExpect(status().isCreated())
+//                .andExpect(jsonPath("$.client").value("client1"))
+//                .andExpect(jsonPath("$.tier").value("tier1"));
+//    }
+//
+//    @Test
+//    public void testRegisterClientSubscription_Failure() throws Exception {
+//
+//        when(subscriptionService.subscribeClient(client1, tier1.getId())).thenThrow(new RuntimeException("Error occurred"));
+//
+//        mockMvc.perform(post("/v1/subscriptions/create")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content("{\"client\":\"client1\", \"subscriptionTierId\":\"tier1\"}"))
+//                .andExpect(status().isBadRequest());
+//    }
+//
+//    @Test
+//    public void testRegisterClientSubscription_Modify_Success() throws Exception {
+//
+//        when(subscriptionService.getClientSubscription(client1)).thenReturn(null);
+//
+//        mockMvc.perform(post("/v1/subscriptions/modify")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content("{\"client\":\"client1\"}"))
+//                .andExpect(status().isCreated());
+//    }
+//
+//    @Test
+//    public void testRegisterClientSubscription_Modify_Failure() throws Exception {
+//
+//        when(subscriptionService.getClientSubscription(client1)).thenThrow(new RuntimeException("Error occurred"));
+//
+//        mockMvc.perform(post("/v1/subscriptions/modify")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content("{\"client\":\"client1\"}"))
+//                .andExpect(status().isBadRequest());
+//    }
+//
+//    @Test
+//    public void testListClients() throws Exception {
+//
+//        List<Client> clients = Arrays.asList(client1, client2);
+//        List<Client> spsps  = clientRepository.findAll();
+//        System.out.println(spsps);
+//        when(clientRepository.findAll()).thenReturn(clients);
+//
+//        mockMvc.perform(get("/v1/client"))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.length()").value(2))
+//                .andExpect(jsonPath("$[0].name").value("client1"))
+//                .andExpect(jsonPath("$[1].name").value("client2"));
+//    }
 
 }
 

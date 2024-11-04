@@ -5,7 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.Instant;
-import java.util.Date;
+
 
 @Entity
 public class Client {
@@ -33,9 +33,10 @@ public class Client {
         this.name = name;
         this.email = email;
         this.phone = phone;
-        this.insert_date = Instant.now();
-        this.update_date = Instant.now();
 
+    }
+
+    public Client() {
     }
 
     public Long getId() {
