@@ -8,10 +8,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class FrontEndController {
 
     @GetMapping("/")
-    public ModelAndView home() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("index");
-        return modelAndView;
+    public String home() {
+        return "redirect:/index.html";
     }
 
 }

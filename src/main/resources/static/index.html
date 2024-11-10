@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="${_csrf.token}">
     <title>KerTalu Subscription</title>
     <style>
         body {
@@ -177,36 +176,57 @@
     <h3>Register for Subscription</h3>
     <input type="text" id="name" placeholder="Your Name" required>
     <input type="email" id="email" placeholder="Your Email" required>
+    <input type="phone" id="phone" placeholder="Your phone number" required>
     <input type="text" id="subscriptionType" placeholder="Subscription Type" readonly>
     <button onclick="submitForm()">Submit</button>
     <p class="loading" id="loading">Submitting...</p>
 </div>
 
 <script>
-        function selectTier(tier) {
-            document.getElementById('subscriptionType').value = tier.charAt(0).toUpperCase() + tier.slice(1);
+        const selectTier = (tier) => {
+            document.getElementById('subscriptionType').value = `${tier.charAt(0).toUpperCase()}${tier.slice(1)}`;
             document.getElementById('registerForm').style.display = 'block';
-        }
+        };
 
-        function closeForm() {
+        const closeForm = () => {
             document.getElementById('registerForm').style.display = 'none';
-        }
+        };
 
-        async function submitForm() {
+        const submitForm = async () => {
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
-            const subscriptionType = document.getElementById('subscriptionType').value;
+            const phone = document.getElementById('phone').value;
+            const subscriptionTierValue = document.getElementById('subscriptionType').value;
             const loading = document.getElementById('loading');
+                var tt = 
+               //TODO subscription tier ID needs to be fetched from a non exisiting endpoint /v1/subsriptionOptions now it is a String 
+            subscriptionTierIds = {
+                Basic : 1,
+                Advanced : 2,
+                Pro : 3
+            }
+            subscriptionTierId = subscriptionTierIds[subscriptionTierValue];
+            console.log(subscriptionTierId)
 
             const subscriptionDetails = {
-                name: name,
-                email: email,
-                subscriptionType: subscriptionType
+                clientRegistrationInformation : {
+                    name : `${name}`,
+                    email : `${email}`,
+                    phone : `${phone}`
+                },
+                subscriptionTierId : `${subscriptionTierId}`
             };
 
-            loading.style.display = 'block';
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const getCSRFToken = async () => {
+                const response = await fetch('/v1/csrf-token');
+                const data = await response.json();
+                return data.token;
+            };
+
             try {
+                const csrfToken = await getCSRFToken();
+                console.log(subscriptionDetails);
+
                 const response = await fetch('http://localhost:8080/v1/subscriptions/create', {
                     method: 'POST',
                     headers: {
@@ -216,20 +236,22 @@
                     body: JSON.stringify(subscriptionDetails)
                 });
 
-                loading.style.display = 'none';
-
                 if (response.ok) {
+                    console.log(response);
                     alert('Subscription created successfully!');
                     closeForm();
+                    window.location.href = '../profile.html';
                 } else {
+                    console.log(response);
                     alert('Failed to create subscription. Please try again.');
                 }
             } catch (error) {
+                console.log(error);
                 console.error('Error:', error);
                 alert('An error occurred. Please try again later.');
                 loading.style.display = 'none';
             }
-        }
+        };
     </script>
 </body>
 </html>

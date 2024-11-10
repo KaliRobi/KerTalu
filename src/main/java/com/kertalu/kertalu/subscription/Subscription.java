@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "subscription")
 public class Subscription {
 
     @Id

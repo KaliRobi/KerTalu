@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 @Entity
+@Table(name = "subscription_tier")
 public class SubscriptionTier {
 
         @Id
