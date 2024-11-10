@@ -40,7 +40,7 @@ public class RestController {
         Subscription subscription = null;
         try {
             subscription = subscriptionService.subscribeClient(request.getClientRegistrationInformation(), request.getSubscriptionTierId());
-            System.out.println(subscription.getId());
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 

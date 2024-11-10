@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.Date;
 
 @Entity
+@Table(name = "kertalu_services")
 public class KtService {
 
     @Id

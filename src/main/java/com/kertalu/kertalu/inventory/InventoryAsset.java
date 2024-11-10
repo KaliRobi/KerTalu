@@ -8,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.Instant;
 
 @Entity
+@Table(name = "inventory_asset")
 public class InventoryAsset {
 
     @Id
