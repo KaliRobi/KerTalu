@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscription Tier Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 20px;
+      background-color: #f8f9fa;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      margin-bottom: 20px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    form input, form button {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    form button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: white;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    table th, table td {
+      padding: 12px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    table th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    table td button {
+      padding: 8px 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .delete-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .save-btn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .edit-input {
+      width: 90%;
+    }
+  </style>
+</head>
+<body>
+  <h1>Subscription Tier Manager</h1>
+
+  
+  <form id="create-tier-form">
+    <h3>Create New Tier</h3>
+    <input type="text" id="new-name" placeholder="Name" required>
+    <input type="text" id="new-description" placeholder="Description" required>
+    <input type="text" id="new-kt-service-list" placeholder="KT Service List" required>
+    <label>
+      <input type="checkbox" id="new-is-public"> Is Public
+    </label>
+    <button type="submit">Create</button>
+  </form>
+
+  
+  <table>
+    <thead>
+      <tr>
+        <th>KT Service List</th>
+        <th>Description</th>
+        <th>Is Public</th>
+        <th>Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="tier-table-body">
+      
+    </tbody>
+  </table>
+
+  <script>
+    const apiBase = "http://localhost:8080/v1/subscriptions";
+  
+    // Fetch and display tiers
+    const fetchTiers = async () => {
+      try {
+        const response = await fetch(`${apiBase}/list-tier`);
+        const tiers = await response.json();
+        const tableBody = document.getElementById("tier-table-body");
+        tableBody.innerHTML = ""; // Clear existing rows
+        if (tiers && tiers.length) {
+          tiers.forEach(tier => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td><input type="text" class="edit-input" value="${tier.kt_service_list}" data-id="${tier.id}" data-field="kt_service_list"></td>
+              <td><input type="text" class="edit-input" value="${tier.description}" data-id="${tier.id}" data-field="description"></td>
+              <td>
+                <input type="checkbox" class="edit-input" data-id="${tier.id}" data-field="is_public" ${tier.is_public ? 'checked' : ''}>
+              </td>
+              <td><input type="text" class="edit-input" value="${tier.name}" data-id="${tier.id}" data-field="name"></td>
+              <td>
+                <button class="delete-btn" onclick="deleteTier(${tier.id})">Delete</button>
+                <button class="save-btn" onclick="updateTier(${tier.id})">Save</button>
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+        } else {
+          tableBody.innerHTML = "<tr><td colspan='5'>No tiers available</td></tr>";
+        }
+      } catch (error) {
+        console.error("Error fetching tiers:", error);
+      }
+    };
+  
+    // Create a new tier
+    document.getElementById("create-tier-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+  
+      const newTier = {
+        name: document.getElementById("new-name").value,
+        description: document.getElementById("new-description").value,
+        kt_service_list: document.getElementById("new-kt-service-list").value,
+        is_public: document.getElementById("new-is-public").checked
+      };
+  
+      try {
+        await fetch(`${apiBase}/create-or-modify-tier`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newTier)
+        });
+        await fetchTiers(); 
+      } catch (error) {
+        console.error("Error creating tier:", error);
+      }
+    });
+  
+    // Delete a tier
+    const deleteTier = async (id) => {
+      try {
+        await fetch(`${apiBase}/delete-tier`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id })
+        });
+        await fetchTiers(); // Refresh table
+      } catch (error) {
+        console.error("Error deleting tier:", error);
+      }
+    };
+  
+    // Update a tier
+    const updateTier = async (id) => {
+      const rowInputs = [...document.querySelectorAll(`.edit-input[data-id='${id}']`)];
+      const updatedTier = rowInputs.reduce((tier, input) => {
+        const { field } = input.dataset;
+        tier[field] = input.type === "checkbox" ? input.checked : input.value;
+        return tier;
+      }, { id });
+  
+      try {
+        await fetch(`${apiBase}/create-or-modify-tier`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedTier)
+        });
+        await fetchTiers(); // Refresh table
+      } catch (error) {
+        console.error("Error updating tier:", error);
+      }
+    };
+  // fetch when loads
+    document.addEventListener("DOMContentLoaded", fetchTiers);
+  </script>

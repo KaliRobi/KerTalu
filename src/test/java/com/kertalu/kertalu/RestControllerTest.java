@@ -61,7 +61,7 @@ public class RestControllerTest {
         client1 = new Client(  "Jon Doe", "jon.doe@message.com", "+3725555500");
         client2 = new Client(  "Jane Doe", "jane.doe@message.com", "+3725555500");
 //        ClientRegistrationInformation clientRegistrationInformation = new ClientRegistrationInformation("Arvo Part");
-        tier1 = new SubscriptionTier(55L, Instant.now(), "test tier", "tier tier", true, null );
+        tier1 = new SubscriptionTier( "test tier", "tier tier", true, null );
         subscription = new Subscription(Instant.now(), true, tier1, client1);
         request = new SubscriptionRequest();
 //        request.setClient(client1);

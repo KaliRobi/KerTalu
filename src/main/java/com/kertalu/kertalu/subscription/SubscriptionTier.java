@@ -1,12 +1,12 @@
 package com.kertalu.kertalu.subscription;
 
 import com.kertalu.kertalu.kertaluservices.KtService;
+import com.kertalu.kertalu.repositories.SubscriptionTierRepository;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 
 @Entity
 @Table(name = "subscription_tier")
@@ -14,27 +14,30 @@ public class SubscriptionTier {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private final Long id;
+        private  Long id;
 
         @Column(name = "insert_date", nullable = false, updatable = false)
         @Temporal(TemporalType.TIMESTAMP)
         @CreatedDate
-        private final Instant insert_date;
+        private  Instant insert_date;
         private final String name;
         private String description;
 
         private boolean isPublic;
         private final ArrayList<KtService> KtServiceList;
 
+        private SubscriptionTierRepository subscriptionTierRepository;
 
-    public SubscriptionTier(Long id, Instant insert_date, String name, String description, boolean isPublic, ArrayList<KtService> ktServiceList) {
-        this.id = id;
-        this.insert_date = insert_date;
+
+    public SubscriptionTier(String name, String description, boolean isPublic, ArrayList<KtService> ktServiceList) {
         this.name = name;
         this.description = description;
         this.isPublic = isPublic;
         KtServiceList = ktServiceList;
     }
+
+
+
 
     public Long getId() {
         return id;

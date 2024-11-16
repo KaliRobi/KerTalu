@@ -47,7 +47,7 @@ public class SubscriptionServiceTest {
         ktService = new KtService(1L, Instant.now(), true, "SR1", "this is a dummy service object");
         ArrayList<KtService> serviceList = new ArrayList<>();
         serviceList.add(ktService);
-        subscriptionTier = new SubscriptionTier(55L, Instant.now(), "test tier", "tier tier", true, serviceList);
+        subscriptionTier = new SubscriptionTier( "test tier", "tier tier", true, serviceList);
         subscription = new Subscription(Instant.now(), true, subscriptionTier, client);
     }
 
