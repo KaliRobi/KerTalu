@@ -86,8 +86,11 @@
   
   <form id="create-tier-form">
     <h3>Create New Tier</h3>
+    <label>Name</label>
     <input type="text" id="new-name" placeholder="Name" required>
+    <label>Description</label>
     <input type="text" id="new-description" placeholder="Description" required>
+    <label>KT Service List</label>
     <input type="text" id="new-kt-service-list" placeholder="KT Service List" required>
     <label>
       <input type="checkbox" id="new-is-public"> Is Public
@@ -113,11 +116,23 @@
 
   <script>
     const apiBase = "http://localhost:8080/v1/subscriptions";
+    let csrfToken = "";
+  
+    // Fetch CSRF token
+    const fetchCsrfToken = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/v1/csrf-token`);
+        const data = await response.json();
+        csrfToken = data.token; 
+      } catch (error) {
+        alert("Error fetching CSRF token:", error);
+      }
+    };
   
     // Fetch and display tiers
     const fetchTiers = async () => {
       try {
-        const response = await fetch(`${apiBase}/list-tier`);
+        const response = await fetch(`${apiBase}/list-subscription-tier`);
         const tiers = await response.json();
         const tableBody = document.getElementById("tier-table-body");
         tableBody.innerHTML = ""; // Clear existing rows
@@ -142,14 +157,14 @@
           tableBody.innerHTML = "<tr><td colspan='5'>No tiers available</td></tr>";
         }
       } catch (error) {
-        console.error("Error fetching tiers:", error);
+        alert("Error fetching tiers:", error);
       }
     };
   
     // Create a new tier
     document.getElementById("create-tier-form").addEventListener("submit", async (e) => {
       e.preventDefault();
-  
+      console.log(csrfToken)
       const newTier = {
         name: document.getElementById("new-name").value,
         description: document.getElementById("new-description").value,
@@ -159,13 +174,16 @@
   
       try {
         await fetch(`${apiBase}/create-or-modify-tier`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken 
+          },
           body: JSON.stringify(newTier)
         });
-        await fetchTiers(); 
+        await fetchTiers();
       } catch (error) {
-        console.error("Error creating tier:", error);
+        alert("Error creating tier:", error);
       }
     });
   
@@ -174,12 +192,15 @@
       try {
         await fetch(`${apiBase}/delete-tier`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken 
+          },
           body: JSON.stringify({ id })
         });
         await fetchTiers(); // Refresh table
       } catch (error) {
-        console.error("Error deleting tier:", error);
+        alert("Error deleting tier:", error);
       }
     };
   
@@ -195,14 +216,21 @@
       try {
         await fetch(`${apiBase}/create-or-modify-tier`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken 
+          },
           body: JSON.stringify(updatedTier)
         });
-        await fetchTiers(); // Refresh table
+        await fetchTiers();
       } catch (error) {
-        console.error("Error updating tier:", error);
+        alert("Error updating tier:", error);
       }
     };
-  // fetch when loads
-    document.addEventListener("DOMContentLoaded", fetchTiers);
+  
+    // Fetch CSRF token and tiers when the page loads
+    document.addEventListener("DOMContentLoaded", async () => {
+      await fetchCsrfToken();
+      await fetchTiers();
+    });
   </script>

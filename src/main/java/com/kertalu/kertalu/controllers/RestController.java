@@ -40,8 +40,10 @@ public class RestController {
     public ResponseEntity<String> registerClientSubscription(@RequestBody SubscriptionRequest request) {
         Subscription subscription = null;
         try {
-            subscription = subscriptionService.subscribeClient(request.getClientRegistrationInformation(), request.getSubscriptionTierId());
+            //TODO change subscription Request
+            subscription = subscriptionService.subscribeClient(request.getClientRegistrationInformation(), request.getSubscriptionTierId() );
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(String.valueOf(subscription));
@@ -49,6 +51,7 @@ public class RestController {
 
     @PostMapping(path = "/v1/subscriptions/create-or-modify-tier")
     public ResponseEntity<String> manageSubscriptionTier(@RequestBody SubscriptionTier subscriptionTier ){
+        System.out.println(subscriptionTier);
         try {
             subscriptionTierService.saveSubscriptionTier(subscriptionTier);
         } catch (Exception e) {
@@ -66,8 +69,10 @@ public class RestController {
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(String.valueOf("Subscription deleted"));
     }
+    //TODO
+    // this will be also dynamically provide the client the description on the site where users can pick the subscription tier.
 
-    @GetMapping(path = "/v1/subscriptions/list-tier")
+    @GetMapping(path = "/v1/subscriptions/list-subscription-tier")
     public ResponseEntity<List<SubscriptionTier>> listAvailableSubscriptions(){
         return ResponseEntity.status(HttpStatus.OK).body(subscriptionTierService.getSubscriptionList());
     }

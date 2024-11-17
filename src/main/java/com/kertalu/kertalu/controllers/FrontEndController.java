@@ -14,7 +14,7 @@ public class FrontEndController {
 
     @GetMapping("/subscription-tier-manager")
     public String subscriptionTierManager() {
-        return "redirect:/subscription_tier_manager.html";
+        return "/subscription_tier_manager.html";
     }
 
 }

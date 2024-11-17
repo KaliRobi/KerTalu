@@ -11,10 +11,8 @@ import com.kertalu.kertalu.subscription.Subscription;
 import com.kertalu.kertalu.subscription.SubscriptionService;
 import com.kertalu.kertalu.subscription.SubscriptionTier;
 import com.kertalu.kertalu.users.clients.ktclients.Client;
-import com.kertalu.kertalu.users.userregistration.ClientRegistrationInformation;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -22,13 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.List;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -55,17 +51,17 @@ public class RestControllerTest {
     private  SubscriptionTier tier1;
     private  SubscriptionRequest request;
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.openMocks(this);
-        client1 = new Client(  "Jon Doe", "jon.doe@message.com", "+3725555500");
-        client2 = new Client(  "Jane Doe", "jane.doe@message.com", "+3725555500");
-//        ClientRegistrationInformation clientRegistrationInformation = new ClientRegistrationInformation("Arvo Part");
-        tier1 = new SubscriptionTier( "test tier", "tier tier", true, null );
-        subscription = new Subscription(Instant.now(), true, tier1, client1);
-        request = new SubscriptionRequest();
-//        request.setClient(client1);
-    }
+//    @BeforeEach
+//    public void setup() {
+//        MockitoAnnotations.openMocks(this);
+//        client1 = new Client(  "Jon Doe", "jon.doe@message.com", "+3725555500");
+//        client2 = new Client(  "Jane Doe", "jane.doe@message.com", "+3725555500");
+////        ClientRegistrationInformation clientRegistrationInformation = new ClientRegistrationInformation("Arvo Part");
+//        tier1 = new SubscriptionTier( "test tier", "tier tier", true, null );
+//        subscription = new Subscription(Instant.now(), true, tier1, client1);
+//        request = new SubscriptionRequest();
+////        request.setClient(client1);
+//    }
 
 //
 //    @Test

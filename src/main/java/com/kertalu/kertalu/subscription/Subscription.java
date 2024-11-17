@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "subscription")

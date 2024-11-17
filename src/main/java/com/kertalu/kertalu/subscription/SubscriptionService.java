@@ -3,11 +3,8 @@ package com.kertalu.kertalu.subscription;
 import com.kertalu.kertalu.users.clients.ktclients.Client;
 import com.kertalu.kertalu.kertaluservices.KtService;
 import com.kertalu.kertalu.repositories.SubscriptionRepository;
-import com.kertalu.kertalu.repositories.SubscriptionTierRepository;
 import com.kertalu.kertalu.users.clients.ktclients.ClientService;
 import com.kertalu.kertalu.users.userregistration.ClientRegistrationInformation;
-import com.kertalu.kertalu.users.userregistration.ClientRegistrationInformationService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +18,13 @@ public class SubscriptionService {
     @Autowired
     private SubscriptionRepository subscriptionRepository;
 
-    @Autowired
-    private SubscriptionTierRepository subscriptionTierRepository;
+
+    private SubscriptionTierService subscriptionTierService;
 
 
-    public Subscription subscribeClient(ClientRegistrationInformation clientInfo, Long tierId) throws Exception {
+    public Subscription subscribeClient(ClientRegistrationInformation clientInfo, String tierName) throws Exception {
 
-                SubscriptionTier tier = subscriptionTierRepository.findById(tierId)
+                SubscriptionTier tier = subscriptionTierService.findSubscriptionTier(tierName)
                 .orElseThrow(() -> new Exception("Tier not found"));
 
                 Client client = new Client(clientInfo.getName(), clientInfo.getEmail(), clientInfo.getEmail());
