@@ -1,10 +1,12 @@
 package com.kertalu.kertalu.subscription;
 
+import com.kertalu.kertalu.messaging.SubscriptionKafkaProducer;
 import com.kertalu.kertalu.users.clients.ktclients.Client;
 import com.kertalu.kertalu.kertaluservices.KtService;
 import com.kertalu.kertalu.repositories.SubscriptionRepository;
 import com.kertalu.kertalu.users.clients.ktclients.ClientService;
 import com.kertalu.kertalu.users.userregistration.ClientRegistrationInformation;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,9 @@ public class SubscriptionService {
 
     private SubscriptionTierService subscriptionTierService;
 
+    private SubscriptionKafkaProducer subscriptionKafkaProducer;
 
+    @Transactional
     public Subscription subscribeClient(ClientRegistrationInformation clientInfo, String tierName) throws Exception {
 
                 SubscriptionTier tier = subscriptionTierService.findSubscriptionTier(tierName)
@@ -34,7 +38,10 @@ public class SubscriptionService {
 
                 Subscription subscription = new Subscription(Instant.now(), true, tier, client);
 
-        return subscriptionRepository.save(subscription);
+                subscriptionRepository.save(subscription);
+
+                subscriptionKafkaProducer.sendSubscriptionEvent(subscription);
+        return subscription;
     }
 
     public Subscription getClientSubscription(Client client){

@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface SubscriptionTierRepository extends JpaRepository<SubscriptionTier, Long> {
-    @Query("select id from subscription_tier t WHERE t.name = ?1")
-    Optional<SubscriptionTier> findByName(String tierName);
+    @Query("SELECT t FROM SubscriptionTier t WHERE t.name = ?1")
+    public Optional<SubscriptionTier> findTierByName(String tierName);
 }

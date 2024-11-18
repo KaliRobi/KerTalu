@@ -5,7 +5,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +19,7 @@ public class SubscriptionTierService {
     }
 
     public Optional<SubscriptionTier> findSubscriptionTier(String tierName){
-        return subscriptionTierRepository.findByName(tierName);
+        return subscriptionTierRepository.findTierByName(tierName);
     }
 
     @Transactional

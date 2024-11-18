@@ -20,6 +20,7 @@ public class SubscriptionTier {
         @Column(name = "insert_date", updatable = false)
         @CreatedDate
         private Instant insert_date;
+        @Column(name = "name")
         private String name;
         private String description;
 
