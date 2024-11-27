@@ -37,6 +37,8 @@ public class Subscription {
         this.client = client;
     }
 
+
+
     public Long getId() {
         return id;
     }
